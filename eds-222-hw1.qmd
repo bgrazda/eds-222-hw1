@@ -2,6 +2,8 @@
 title: "EDS 222: Homework 1"
 date: "Assigned 10/7, due 10/14"
 author: "Brooke Grazda"
+warning: false
+message: false
 ---
 
 ## Background
@@ -30,9 +32,14 @@ Load the data from each source and label it as `crowdsourced` and `govt` accordi
 
 ``` {r}
 library(tidyverse)
+library(sf)
+library(mapview)
+library(here)
 
 crowdsourced <- readRDS(file.path("data", "airpol-PK-crowdsourced.RDS"))
 govt <- readRDS(file.path("data", "airpol-PK-govt.RDS"))
+
+
 ```
 
 ::: callout-warning
@@ -42,8 +49,11 @@ Must create a data folder, and the assumption is that your project is in its own
 
 
 1.  These dataframes have one row per pollution observation. How many pollution records are in each dataset?
+
 There are 5488 pollution crowdsourced pollution records and 1960 government pollution records.
+
 2.  Each monitor is located at a unique latitude and longitude location. How many unique monitors are in each dataset? 
+
 There are 14 unique monitors in the crowdsourced data set and 5  unique monitors in the govt dataset. 
 
 
@@ -68,6 +78,7 @@ unique_crowdsourced_values <- crowdsourced |>
 The goal of pollution monitoring in Lahore is to measure the average pollution conditions across the city.
 
 1.  What is the *population* in this setting? Please be precise.
+
 The population is the total exposure of 11.1 million people in Lahore, Pakistan who are susceptible increased respiratory and cardiovascular health risks, ranking Lahore as the 12th most polluted city in the world.
 
 2.  What are the *samples* in this setting? Please be precise.
@@ -85,11 +96,25 @@ There is definitely a convenience bias by choosing the location of the governmen
 ```{r}
 govt_mean <- mean(govt$PM)
 govt_min <- min(govt$PM)
+govt_max <- max(govt$PM)
+
+crowdsrced_mean <- mean(crowdsourced$PM)
+crowdsrced_min <- min(crowdsourced$PM)
+crowdsrced_max <- max(crowdsourced$PM)
 ```
+
+For the government data, the sample mean is `r govt_mean` $\mu g/m^3$. The government sample minimum value is `r govt_min` $\mu g/m^3$. The government sample max value is `r govt_max` $\mu g/m^3$.
+
+For the crowdsourced data, the sample mean is `r crowdsrced_mean` $\mu g/m^3$. The crowdsourced sampled minimum value is `r crowdsrced_min` $\mu g/m^3$. The max value for the crowdsourced sample is `r crowdsrced_max` $\mu g/m^3$. 
 
 
 2.  Discuss any key differences that you see between these two samples.
+
+The key differences between these two samples are that the statistic mean, min, and max values in the crowdsourced sample are overall much higher. There are also many more observations in the crowdsourced sample compared to the government sample. 
+
 3.  Are the differences in mean pollution as expected, given what we know about the sampling strategies?
+
+Yes, the differences in mean pollution are expected given the bias we predicted before analyzing the data. With the government employing their own pollution monitors, we predicted that perhaps the values would be lower to make the levels and urgency of the pollution not appear as prominent. This turned out to be true with the lower overall mean in government samples. 
 
 ### Question 4
 
@@ -98,6 +123,16 @@ Use the location of the air pollution stations for both of the sampling strategi
 ::: callout-tip
 `longitude` indicates location in the *x*-direction, while `latitude` indicates location in the *y*-direction. With `ggplot2` this should be nothing fancy. We'll do more spatial data in `R` later in the course.
 :::
+```{r}
+gov_sf <- st_as_sf(govt, coords = c('longitude', 'latitude'))
+
+crowd_sf <-st_as_sf(crowdsourced, coords = c('longitude', 'latitude'))
+
+ggplot(gov_sf) +
+  geom_sf() +
+  geom
+
+```
 
 ### Question 5
 
