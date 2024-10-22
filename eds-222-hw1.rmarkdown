@@ -6,6 +6,7 @@ warning: false
 message: false
 ---
 
+
 ## Background
 
 *(The case study in this exercise is based on reality, but does not include actual observational data.)*
@@ -30,6 +31,7 @@ In answering the following questions, please consider the lecture content from c
 
 Load the data from each source and label it as `crowdsourced` and `govt` accordingly. For example:
 
+
 ```{r}
 library(tidyverse)
 library(sf)
@@ -43,6 +45,7 @@ govt <- readRDS(file.path("data", "airpol-PK-govt.RDS"))
 
 ```
 
+
 ::: callout-warning
 There's an implicit assumption about file organization in the code above. What is it? How can you make the code work? Must create a data folder, and the assumption is that your project is in its own repo folder. Loading the data into the data folder makes the code work.
 :::
@@ -55,6 +58,7 @@ There are 5488 pollution crowdsourced pollution records and 1960 government poll
 
 There are 14 unique monitors in the crowdsourced data set and 5 unique monitors in the govt dataset.
 
+
 ```{r}
 # Find unique values
 unique_govt_values <- govt |> 
@@ -65,6 +69,7 @@ unique_crowdsourced_values <- crowdsourced |>
   group_by(longitude, latitude) |> 
   summarise(list(cur_group_id()))
 ```
+
 
 ::: callout-tip
 `group_by(longitude,latitude)` and `cur_group_id()` in `dplyr` will help in creating a unique identifier for each (longitude, latitude) pair.
@@ -90,6 +95,7 @@ There is definitely a convenience bias by choosing the location of the governmen
 
 1.  For both the government data and the crowd-sourced data, report the sample mean, sample minimum, and sample maximum value of PM 2.5 (measured in $\mu g/m^3$).
 
+
 ```{r}
 govt_mean <- mean(govt$PM)
 govt_min <- min(govt$PM)
@@ -99,6 +105,7 @@ crowdsrced_mean <- mean(crowdsourced$PM)
 crowdsrced_min <- min(crowdsourced$PM)
 crowdsrced_max <- max(crowdsourced$PM)
 ```
+
 
 For the government data, the sample mean is `r govt_mean` $\mu g/m^3$. The government sample minimum value is `r govt_min` $\mu g/m^3$. The government sample max value is `r govt_max` $\mu g/m^3$.
 
@@ -120,6 +127,7 @@ Use the location of the air pollution stations for both of the sampling strategi
 `longitude` indicates location in the *x*-direction, while `latitude` indicates location in the *y*-direction. With `ggplot2` this should be nothing fancy. We'll do more spatial data in `R` later in the course.
 :::
 
+
 ```{r}
 govt <- govt |> mutate("sample_type" = "government")                             # Preparing to join, creating a sample type column
 
@@ -136,6 +144,7 @@ ggplot(full_sample_join) +
        color = "Sample Type")
   
 ```
+
 
 ### Question 5
 
@@ -157,6 +166,7 @@ First, generate a *random sample* of size $n=1000$ air pollution records by (i) 
 `bind_rows()` may be helpful.
 :::
 
+
 ```{r}
 set.seed(4321)
 
@@ -165,7 +175,9 @@ df_sample <- full_sample_join |>
   slice_sample(n = 1000)
 ```
 
+
 Second, create a *stratified random sample*. Do so by (i) stratifying your pooled data-set into strata of 0.01 degrees of latitude, and (ii) randomly sampling 200 air pollution observations from each stratum.
+
 
 ```{r}
 stratified <- full_sample_join |>  
@@ -177,9 +189,11 @@ strat_slice <- stratified |>
 ```
 
 
+
 #### Question 6.2
 
 Compare estimated means of PM 2.5 for each sampling strategy to the NASA estimate of 89.2 $\mu g/m^3$. Which sample seems to match the satellite data best? What would you recommend the Prime Minister do? Does your proposed sampling strategy rely more on government or on crowd-sourced data? Why might that be the case?
+
 
 ```{r}
 estimated_mean_rand <- rand |> summarise(mean(PM))       # 62.666 
@@ -189,4 +203,6 @@ estimated_mean_strat <- strat_slice |> summarise(mean(PM))        # 66.95
 estimated_mean_corrupt <- full_sample_join |> summarise(mean(PM))        # 62.1603
 ```
 
+
 THe stratified random sample seems to be the closest to the satellite data. Since the strata were based on the non uniform sample employed by the government, the Prime Minister can employ a greater spread of monitors of specifically government type, or crowdsourced data in greater areas as well. This way, he can more evenly randomize the stratified samples over a greater area or time frame. This would still rely on the crowdsourced data more heavily than the government because they have fewer existing samples. 
+
