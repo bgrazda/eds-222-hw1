@@ -182,11 +182,11 @@ strat_slice <- stratified |>
 Compare estimated means of PM 2.5 for each sampling strategy to the NASA estimate of 89.2 $\mu g/m^3$. Which sample seems to match the satellite data best? What would you recommend the Prime Minister do? Does your proposed sampling strategy rely more on government or on crowd-sourced data? Why might that be the case?
 
 ```{r}
-estimated_mean_rand <- rand |> summarise(mean(PM))       # 62.666 
+estimated_mean_rand <- df_sample |> summarise(mean(PM))       # 62.666 
 
 estimated_mean_strat <- strat_slice |> summarise(mean(PM))        # 66.95
 
 estimated_mean_corrupt <- full_sample_join |> summarise(mean(PM))        # 62.1603
 ```
 
-THe stratified random sample seems to be the closest to the satellite data. Since the strata were based on the non uniform sample employed by the government, the Prime Minister can employ a greater spread of monitors of specifically government type, or crowdsourced data in greater areas as well. This way, he can more evenly randomize the stratified samples over a greater area or time frame. This would still rely on the crowdsourced data more heavily than the government because they have fewer existing samples. 
+The stratified random sample seems to be the closest to the satellite data. Since the strata were based on the non uniform sample employed by the government, the Prime Minister can employ a greater spread of monitors of specifically government type, or crowdsourced data in greater areas as well. This way, he can more evenly randomize the stratified samples over a greater area or time frame. This would still rely on the crowdsourced data more heavily than the government because they have fewer existing samples. 

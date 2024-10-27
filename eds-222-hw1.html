@@ -228,15 +228,15 @@ Tip
 <ol type="1">
 <li>What is the <em>population</em> in this setting? Please be precise.</li>
 </ol>
-<p>The population is the total exposure of 11.1 million people in Lahore, Pakistan who are susceptible increased respiratory and cardiovascular health risks, ranking Lahore as the 12th most polluted city in the world.</p>
+<p>The population is the total exposure of 11.1 million people in Lahore, Pakistan over the given time period, who are susceptible increased respiratory and cardiovascular health risks, ranking Lahore as the 12th most polluted city in the world.</p>
 <ol start="2" type="1">
 <li>What are the <em>samples</em> in this setting? Please be precise.</li>
 </ol>
-<p>The samples are the pollution level monitors that are crowdsourced and employed by the Lahore government.</p>
+<p>The samples are the pollution level monitors that are crowdsourced and employed by the Lahore government over the given time period. The 2 samples are the areas where the monitors are being installed, by crowdsource or government. Both samples represent observations from November 4th, 2018 to November 30th 2019</p>
 <ol start="3" type="1">
 <li>These samples were not randomly collected from across locations in Lahore. Given the sampling approaches described above, discuss possible biases that may enter when we use these samples to construct estimates of population parameters.</li>
 </ol>
-<p>There is definitely a convenience bias by choosing the location of the government employed monitors. It may be true that it is easier for the government to set up these monitors in areas with less air pollution, or it is that this was an example of undercoverage/confirmation bias in failing to provide a representative sample of the wider city pollution exposure. There is certainly a selection bias in those who volunteer to use their homes as monitors. It is likely that those who care more about the issue or have the means to volunteer WILL volunteer, making the sample not representative of the whole population.</p>
+<p>There is definitely a convenience bias by choosing the location of the government employed monitors where the air quality is not as bad. It may be true that it is easier for the government to set up these monitors in areas with less air pollution, or it is that this was an example of undercoverage/confirmation bias in failing to provide a representative sample of the wider city pollution exposure. There is certainly a selection bias in those who volunteer to use their homes as monitors. It is likely that those who care more about the issue or have the means to volunteer WILL volunteer, making the sample not representative of the whole population. Moreover, it is likely that the crowdsource data came from citizens who are educated and have the means of uploading this data to a computer server.</p>
 </section>
 <section id="question-3" class="level3">
 <h3 class="anchored" data-anchor-id="question-3">Question 3</h3>
@@ -257,7 +257,7 @@ Tip
 <ol start="2" type="1">
 <li>Discuss any key differences that you see between these two samples.</li>
 </ol>
-<p>The key differences between these two samples are that the statistic mean, min, and max values in the crowdsourced sample are overall much higher. There are also many more observations in the crowdsourced sample compared to the government sample.</p>
+<p>The key differences between these two samples are that the statistic mean, min, and max values in the crowdsourced sample are overall much higher. There are also many more observations in the crowdsourced sample compared to the government sample. The entire distribution gives smaller PM levels, as a result of the government data.</p>
 <ol start="3" type="1">
 <li>Are the differences in mean pollution as expected, given what we know about the sampling strategies?</li>
 </ol>
@@ -328,7 +328,11 @@ Tip
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>rand <span class="ot">&lt;-</span> <span class="fu">sample_n</span>(full_sample_join, <span class="dv">1000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">4321</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>df_sample <span class="ot">&lt;-</span> full_sample_join <span class="sc">|&gt;</span> </span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_sample</span>(<span class="at">n =</span> <span class="dv">1000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Second, create a <em>stratified random sample</em>. Do so by (i) stratifying your pooled data-set into strata of 0.01 degrees of latitude, and (ii) randomly sampling 200 air pollution observations from each stratum.</p>
 <div class="cell">
@@ -344,13 +348,13 @@ Tip
 <h4 class="anchored" data-anchor-id="question-6.2">Question 6.2</h4>
 <p>Compare estimated means of PM 2.5 for each sampling strategy to the NASA estimate of 89.2 <span class="math inline">\(\mu g/m^3\)</span>. Which sample seems to match the satellite data best? What would you recommend the Prime Minister do? Does your proposed sampling strategy rely more on government or on crowd-sourced data? Why might that be the case?</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>estimated_mean_rand <span class="ot">&lt;-</span> rand <span class="sc">|&gt;</span> <span class="fu">summarise</span>(<span class="fu">mean</span>(PM))       <span class="co"># 62.666 </span></span>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>estimated_mean_rand <span class="ot">&lt;-</span> df_sample <span class="sc">|&gt;</span> <span class="fu">summarise</span>(<span class="fu">mean</span>(PM))       <span class="co"># 62.666 </span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>estimated_mean_strat <span class="ot">&lt;-</span> strat_slice <span class="sc">|&gt;</span> <span class="fu">summarise</span>(<span class="fu">mean</span>(PM))        <span class="co"># 66.95</span></span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>estimated_mean_corrupt <span class="ot">&lt;-</span> full_sample_join <span class="sc">|&gt;</span> <span class="fu">summarise</span>(<span class="fu">mean</span>(PM))        <span class="co"># 62.1603</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>THe stratified random sample seems to be the closest to the satellite data. Since the strata were based on the non uniform sample employed by the government, the Prime Minister can employ a greater spread of monitors of specifically government type. This way, he can more evenly randomize the stratified samples and use less biased methods. This would still rely on the crowdsourced data more heavily than the government because they have fewer existing samples.</p>
+<p>The stratified random sample seems to be the closest to the satellite data. Since the strata were based on the non uniform sample employed by the government, the Prime Minister can employ a greater spread of monitors of specifically government type, or crowdsourced data in greater areas as well. This way, he can more evenly randomize the stratified samples over a greater area or time frame. This would still rely on the crowdsourced data more heavily than the government because they have fewer existing samples.</p>
 </section>
 </section>
 </section>
