@@ -80,7 +80,7 @@ The population is the total exposure of 11.1 million people in Lahore, Pakistan 
 
 2.  What are the *samples* in this setting? Please be precise.
 
-The samples are the pollution level monitors that are crowdsourced and employed by the Lahore government over the given time period. The 2 samples are the areas where the monitors are being installed, by crowdsource or government. Both samples represent observations from November 4th, 2018 to November 30th 2019
+The samples are the pollution level monitors that are crowdsourced and employed by the Lahore government over the given time period. The 2 samples are the areas where the monitors are being installed, by crowdsource or government. Both samples represent observations from November 4th, 2018 to November 30th 2019.
 
 3.  These samples were not randomly collected from across locations in Lahore. Given the sampling approaches described above, discuss possible biases that may enter when we use these samples to construct estimates of population parameters.
 
